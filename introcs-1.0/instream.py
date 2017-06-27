@@ -4,16 +4,17 @@ instream.py
 The instream module defines the InStream class.
 """
 
-#-----------------------------------------------------------------------
+# -----------------------------------------------------------------------
 
 import sys
+import re
 if sys.hexversion < 0x03000000:
     import urllib
 else:
     import urllib.request as urllib
-import re
 
-#-----------------------------------------------------------------------
+# -----------------------------------------------------------------------
+
 
 class InStream:
 
@@ -26,14 +27,14 @@ class InStream:
     -- isEmpty(), readInt(), readFloat(), readBool(), readString()
 
     -- hasNextLine(), readLine()
-    
+
     -- readAll(), readAllInts(), readAllFloats(), readAllBools(),
        readAllStrings(), readAllLines()
 
     Usually it's better to use one set exclusively.
     """
 
-    #-------------------------------------------------------------------
+# -------------------------------------------------------------------
 
     def __init__(self, fileOrUrl=None):
         """
@@ -46,14 +47,14 @@ class InStream:
         self._readingWebPage = False
 
         if fileOrUrl is None:
-            import stdio # To change the mode of sys.stdin
+            import stdio  # To change the mode of sys.stdin
             self._stream = sys.stdin
             return
 
         # Try to open a file, then a URL.
         try:
             if sys.hexversion < 0x03000000:
-                self._stream = open(fileOrUrl,'rU')
+                self._stream = open(fileOrUrl, 'rU')
             else:
                 self._stream = open(fileOrUrl, 'r', encoding='utf-8')
         except IOError:
@@ -63,7 +64,7 @@ class InStream:
             except IOError:
                 raise IOError('No such file or URL: ' + fileOrUrl)
 
-    #-------------------------------------------------------------------
+# -------------------------------------------------------------------
 
     def _readRegExp(self, regExp):
         """
@@ -84,7 +85,7 @@ class InStream:
         self._buffer = self._buffer[match.end():]
         return s.lstrip()
 
-    #-------------------------------------------------------------------
+# -------------------------------------------------------------------
 
     def isEmpty(self):
         """
@@ -100,7 +101,7 @@ class InStream:
             self._buffer += str(line)
         return False
 
-    #-------------------------------------------------------------------
+# -------------------------------------------------------------------
 
     def readInt(self):
         """
@@ -123,7 +124,7 @@ class InStream:
         if (strLength >= 3) and (s[0:3] == '-0X'): radix = 16
         return int(s, radix)
 
-    #-------------------------------------------------------------------
+# -------------------------------------------------------------------
 
     def readAllInts(self):
         """
@@ -139,7 +140,7 @@ class InStream:
             ints.append(i)
         return ints
 
-    #-------------------------------------------------------------------
+# -------------------------------------------------------------------
 
     def readFloat(self):
         """
@@ -154,7 +155,7 @@ class InStream:
         s = self._readRegExp(r'[-+]?(\d+(\.\d*)?|\.\d+)([eE][-+]?\d+)?')
         return float(s)
 
-    #-------------------------------------------------------------------
+# -------------------------------------------------------------------
 
     def readAllFloats(self):
         """
@@ -170,7 +171,7 @@ class InStream:
             floats.append(f)
         return floats
 
-    #-------------------------------------------------------------------
+# -------------------------------------------------------------------
 
     def readBool(self):
         """
@@ -187,7 +188,7 @@ class InStream:
             return True
         return False
 
-    #-----------------------------------------------------------------------
+# -----------------------------------------------------------------------
 
     def readAllBools(self):
         """
@@ -204,7 +205,7 @@ class InStream:
         return bools
 
 
-    #-------------------------------------------------------------------
+# -------------------------------------------------------------------
 
     def readString(self):
         """
@@ -216,7 +217,7 @@ class InStream:
         s = self._readRegExp(r'\S+')
         return s
 
-    #-----------------------------------------------------------------------
+# -----------------------------------------------------------------------
 
     def readAllStrings(self):
         """
@@ -229,7 +230,7 @@ class InStream:
             strings.append(s)
         return strings
 
-    #-------------------------------------------------------------------
+# -------------------------------------------------------------------
 
     def hasNextLine(self):
         """
@@ -245,7 +246,7 @@ class InStream:
                 return False
             return True
 
-    #-------------------------------------------------------------------
+# -------------------------------------------------------------------
 
     def readLine(self):
         """
@@ -258,7 +259,7 @@ class InStream:
         self._buffer = ''
         return s.rstrip('\n')
 
-    #-------------------------------------------------------------------
+# -------------------------------------------------------------------
 
     def readAllLines(self):
         """
@@ -271,7 +272,7 @@ class InStream:
             lines.append(line)
         return lines
 
-    #-------------------------------------------------------------------
+# -------------------------------------------------------------------
 
     def readAll(self):
         """
@@ -286,7 +287,7 @@ class InStream:
             s += line
         return s
 
-    #-------------------------------------------------------------------
+# -------------------------------------------------------------------
 
     def __del__(self):
         """
@@ -294,10 +295,10 @@ class InStream:
         """
         if self._stream is not None:
             self._stream.close()
-
-#=======================================================================
+# =======================================================================
 # For Testing
-#=======================================================================
+# =======================================================================
+
 
 def _main():
     """
@@ -336,6 +337,7 @@ def _main():
         stdio.writeln(inStream.readAllLines())
     elif testId == 'readAll':
         stdio.writeln(inStream.readAll())
+
 
 if __name__ == '__main__':
     _main()
