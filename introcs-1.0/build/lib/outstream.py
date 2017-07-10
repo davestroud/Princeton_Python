@@ -33,7 +33,7 @@ class OutStream:
 
     #-------------------------------------------------------------------
 
-    def writeln(self, x=''):
+    def writeln(self, x: object = '') -> object:
         """
         Write x and an end-of-line mark to the stream wrapped by self.
         """
